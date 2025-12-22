@@ -1,0 +1,279 @@
+{{> partials/main }}
+
+<head>
+
+    {{> partials/title-meta title="Blog" }}
+
+    {{> partials/head-css }}
+
+</head>
+
+{{> partials/body }}
+
+<!-- Start Layout -->
+<div class="bg-slate-50 dark:bg-dark">
+
+    <!-- Start detached bg -->
+    <div class="bg-[url('../images/bg-main.png')] bg-black group-data-[sidebar=dark]/item:bg-darklight group-data-[sidebar=brand]/item:bg-sky-950 min-h-[220px] sm:min-h-[250px] bg-bottom fixed hidden w-full -z-50 detached-img"></div>
+    <!-- End detached bg -->
+
+    <!-- Start Menu Sidebar Overlay -->
+    <div x-cloak class="fixed inset-0 z-10 bg-black/60 dark:bg-dark/90 lg:hidden" :class="{'hidden' : !$store.app.sidebar}" @click="$store.app.toggleSidebar()"></div>
+    <!-- End Menu Sidebar Overlay -->
+
+    <!-- Start Main Content -->
+    <div class="flex mx-auto main-container">
+        {{> partials/sidebar }}
+
+        <!-- Start Content Area -->
+        <div class="flex-1 main-content">
+            {{> partials/topbar }}
+            <!-- Start Content -->
+            <div class="h-[calc(100vh-60px)] relative overflow-y-auto overflow-x-hidden p-4 space-y-4 detached-content">
+                {{> partials/page-heading title="Sliced Pro" sub-title="Blog" }}
+                <!-- Start All Card -->
+                <div class="flex flex-col gap-4 min-h-[calc(100vh-212px)]">
+                    <div class="grid grid-cols-12 gap-4">
+                        <div class="col-span-12 xl:col-span-8">
+                            <div class="grid grid-cols-12 gap-4">
+                                <div class="col-span-12 card">
+                                    <div class="grid grid-cols-12">
+                                        <div class="col-span-12 sm:col-span-7">
+                                            <h4 class="mb-3 text-lg font-bold">Welcome to Sliced Pro Dashboard</h4>
+                                            <h5 class="text-lg">Create a post</h5>
+                                            <p class="mb-3 text-muted">Donec posuere vulputate arcu. Phasellus accumsan cursus velit</p>
+                                            <a href="javascript: void(0);" class="text-white btn bg-purple border-purple">Create post</a>
+                                        </div>
+                                        <div class="col-span-12 sm:col-span-5">
+                                            <div class="flex justify-end">
+                                                <img src="assets/images/blog.svg" class="sm:w-56" alt="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-span-12">
+                                    <div class="col-span-12 xl:col-span-7">
+                                        <div class="card">
+                                            <div class="flex justify-between items-center mb-[5px]">
+                                                <h5 class="text-base font-semibold capitalize text-slate-800 dark:text-slate-100">Sales Analytics</h5>
+                                                <a href="#" class="px-3 py-1.5 rounded-md text-xs border border-black/20 dark:border-darkborder text-muted"><i class="align-bottom ltr:mr-1 rtl:ml-1 ri-filter-line"></i> Aug 2024</a>
+                                            </div>
+                                            <div id="visiter"></div>
+                                        </div>
+                                    </div>
+                                    <!-- End col -->
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End col -->
+                        <div class="col-span-12 xl:col-span-4">
+                            <div class="p-4 card">
+                                <h4 class="mb-2 text-base font-semibold capitalize text-slate-800 dark:text-slate-100">Posts</h4>
+                                <div class="relative">
+                                    <input type="text" id="search" class="border-slate-200 dark:text-white/80 dark:placeholder:text-white/30 dark:border-darkborder dark:bg-dark dark:focus:border-white/30 focus:border-black/30 placeholder:text-black/50 border text-black text-sm rounded block w-full ltr:pl-3 rtl:pr-3 ltr:pr-7 rtl:pl-7 h-10 bg-[#f9fbfd] focus:ring-0 focus:outline-0 mb-4" placeholder="Search..." required="">
+                                    <button type="button" class="absolute inset-y-0 flex items-center text-black ltr:right-0 rtl:left-0 ltr:pr-2 rtl:pl-2 dark:text-white/80">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-4 h-4">
+                                            <path d="M11 2C15.968 2 20 6.032 20 11C20 15.968 15.968 20 11 20C6.032 20 2 15.968 2 11C2 6.032 6.032 2 11 2ZM11 18C14.8675 18 18 14.8675 18 11C18 7.1325 14.8675 4 11 4C7.1325 4 4 7.1325 4 11C4 14.8675 7.1325 18 11 18ZM19.4853 18.0711L22.3137 20.8995L20.8995 22.3137L18.0711 19.4853L19.4853 18.0711Z" fill="currentColor"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div class="mb-4 card">
+                                    <div class="card-body">
+                                        <div class="flex">
+                                            <img src="assets/images/blog/img-1.png" class="w-20 rounded-md" alt="">
+                                            <div class="ms-3">
+                                                <h6 class="mb-2 text-lg">Project discussion with team</h6>
+                                                <p class="text-muted"><i class="ri-calendar-line me-2"></i>10, Sep 2024</p>
+                                            </div>
+                                            <div x-data="{ dropdown: false}" class="ml-auto dropdown">
+                                                <a href="javaScript:;" class="text-black dark:text-white" @click="dropdown = !dropdown" @keydown.escape="dropdown = false">
+                                                    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M9 12.75C9.69036 12.75 10.25 13.3096 10.25 14C10.25 14.6904 9.69036 15.25 9 15.25C8.30964 15.25 7.75 14.6904 7.75 14C7.75 13.3096 8.30964 12.75 9 12.75Z" fill="currentColor"></path>
+                                                        <path d="M14 12.75C14.6904 12.75 15.25 13.3096 15.25 14C15.25 14.6904 14.6904 15.25 14 15.25C13.3096 15.25 12.75 14.6904 12.75 14C12.75 13.3096 13.3096 12.75 14 12.75Z" fill="currentColor"></path>
+                                                        <path d="M20.25 14C20.25 13.3096 19.6904 12.75 19 12.75C18.3096 12.75 17.75 13.3096 17.75 14C17.75 14.6904 18.3096 15.25 19 15.25C19.6904 15.25 20.25 14.6904 20.25 14Z" fill="currentColor"></path>
+                                                    </svg>
+                                                </a>
+                                                <ul x-show="dropdown" @click.away="dropdown = false" x-transition="" x-transition.duration.300ms="" class="ltr:right-0 rtl:left-0 whitespace-nowrap" style="display: none;">
+                                                    <li><a href="javascript:;">Weekly</a></li>
+                                                    <li><a href="javascript:;">Monthly</a></li>
+                                                    <li><a href="javascript:;">Yearly</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-4 card">
+                                    <div class="card-body">
+                                        <div class="flex">
+                                            <img src="assets/images/blog/img-2.png" class="w-20 rounded-md" alt="">
+                                            <div class="ms-3">
+                                                <h6 class="mb-2 text-lg">Drawing a sketch</h6>
+                                                <p class="text-muted"><i class="ri-calendar-line me-2"></i>28, Aug 2024</p>
+                                            </div>
+                                            <div x-data="{ dropdown: false}" class="ml-auto dropdown">
+                                                <a href="javaScript:;" class="text-black dark:text-white" @click="dropdown = !dropdown" @keydown.escape="dropdown = false">
+                                                    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M9 12.75C9.69036 12.75 10.25 13.3096 10.25 14C10.25 14.6904 9.69036 15.25 9 15.25C8.30964 15.25 7.75 14.6904 7.75 14C7.75 13.3096 8.30964 12.75 9 12.75Z" fill="currentColor"></path>
+                                                        <path d="M14 12.75C14.6904 12.75 15.25 13.3096 15.25 14C15.25 14.6904 14.6904 15.25 14 15.25C13.3096 15.25 12.75 14.6904 12.75 14C12.75 13.3096 13.3096 12.75 14 12.75Z" fill="currentColor"></path>
+                                                        <path d="M20.25 14C20.25 13.3096 19.6904 12.75 19 12.75C18.3096 12.75 17.75 13.3096 17.75 14C17.75 14.6904 18.3096 15.25 19 15.25C19.6904 15.25 20.25 14.6904 20.25 14Z" fill="currentColor"></path>
+                                                    </svg>
+                                                </a>
+                                                <ul x-show="dropdown" @click.away="dropdown = false" x-transition="" x-transition.duration.300ms="" class="ltr:right-0 rtl:left-0 whitespace-nowrap" style="display: none;">
+                                                    <li><a href="javascript:;">Weekly</a></li>
+                                                    <li><a href="javascript:;">Monthly</a></li>
+                                                    <li><a href="javascript:;">Yearly</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-4 card">
+                                    <div class="card-body">
+                                        <div class="flex">
+                                            <img src="assets/images/blog/img-3.png" class="w-20 rounded-md" alt="">
+                                            <div class="ms-3">
+                                                <h6 class="mb-2 text-lg">Beautiful Day with Friends</h6>
+                                                <p class="text-muted"><i class="ri-calendar-line me-2"></i>18, Aug 2024</p>
+                                            </div>
+                                            <div x-data="{ dropdown: false}" class="ml-auto dropdown">
+                                                <a href="javaScript:;" class="text-black dark:text-white" @click="dropdown = !dropdown" @keydown.escape="dropdown = false">
+                                                    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M9 12.75C9.69036 12.75 10.25 13.3096 10.25 14C10.25 14.6904 9.69036 15.25 9 15.25C8.30964 15.25 7.75 14.6904 7.75 14C7.75 13.3096 8.30964 12.75 9 12.75Z" fill="currentColor"></path>
+                                                        <path d="M14 12.75C14.6904 12.75 15.25 13.3096 15.25 14C15.25 14.6904 14.6904 15.25 14 15.25C13.3096 15.25 12.75 14.6904 12.75 14C12.75 13.3096 13.3096 12.75 14 12.75Z" fill="currentColor"></path>
+                                                        <path d="M20.25 14C20.25 13.3096 19.6904 12.75 19 12.75C18.3096 12.75 17.75 13.3096 17.75 14C17.75 14.6904 18.3096 15.25 19 15.25C19.6904 15.25 20.25 14.6904 20.25 14Z" fill="currentColor"></path>
+                                                    </svg>
+                                                </a>
+                                                <ul x-show="dropdown" @click.away="dropdown = false" x-transition="" x-transition.duration.300ms="" class="ltr:right-0 rtl:left-0 whitespace-nowrap" style="display: none;">
+                                                    <li><a href="javascript:;">Weekly</a></li>
+                                                    <li><a href="javascript:;">Monthly</a></li>
+                                                    <li><a href="javascript:;">Yearly</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <a href="javascript: void(0);" class="text-white btn bg-purple border-purple">Create post</a>
+                            </div>
+                        </div>
+                        <!-- End col -->
+                        <div class="col-span-12 xl:col-span-4">
+                            <div class="p-4 card">
+                                <div class="flex justify-between gap-5 mb-3">
+                                    <h4 class="text-base font-semibold capitalize text-slate-800 dark:text-slate-100">Platform</h4>
+                                    <p class="text-muted">Last 7 Days</p>
+                                </div>
+                                <div class="mb-4 card">
+                                    <div class="card-body">
+                                        <div class="flex">
+                                            <div class="flex items-center justify-center font-semibold uppercase rounded-full shrink-0 size-12 bg-blue-500/10 text-purple">
+                                                <i class="text-2xl ri-computer-line"></i>
+                                            </div>
+                                            <div class="w-full mx-3">
+                                                <div class="flex justify-between">
+                                                    <h6 class="mb-3 font-semibold">Desktop</h6>
+                                                    <span class="text-muted">50%</span>
+                                                </div>
+                                                <div class="bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                                                    <div class="bg-purple h-2.5 rounded-full" style="width: 50%"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-4 card">
+                                    <div class="card-body">
+                                        <div class="flex">
+                                            <div class="flex items-center justify-center font-semibold uppercase rounded-full shrink-0 size-12 bg-blue-500/10 text-purple">
+                                                <i class="text-2xl ri-smartphone-line"></i>
+                                            </div>
+                                            <div class="w-full mx-3">
+                                                <div class="flex justify-between">
+                                                    <h6 class="mb-3 font-semibold">Mobile</h6>
+                                                    <span class="text-muted">15%</span>
+                                                </div>
+                                                <div class="bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                                                    <div class="bg-purple h-2.5 rounded-full" style="width: 15%"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="flex">
+                                            <div class="flex items-center justify-center font-semibold uppercase rounded-full shrink-0 size-12 bg-blue-500/10 text-purple">
+                                                <i class="text-2xl ri-tablet-line"></i>
+                                            </div>
+                                            <div class="w-full mx-3">
+                                                <div class="flex justify-between">
+                                                    <h6 class="mb-3 font-semibold">Tablet</h6>
+                                                    <span class="text-muted">35%</span>
+                                                </div>
+                                                <div class="bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                                                    <div class="bg-purple h-2.5 rounded-full" style="width: 35%"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end col -->
+                        <div class="col-span-12 xl:col-span-8">
+                            <div class="card">
+                                <div class="flex justify-between mb-4">
+                                    <h2 class="text-base font-semibold capitalize text-slate-800 dark:text-slate-100">Top Visitors</h2>
+                                    <a href="#" class="px-3 py-1.5 bg-gray-100 dark:bg-darklight dark:hover:bg-dark dark:hover:border-darklight dark:text-white dark:border-darkborder dark:hover:border-white/20 border border-gray-300 rounded-md transition-all duration-300 hover:bg-black/[0.85] hover:text-white hover:border-black/[0.60] inline-block">Jun 2024</a>
+                                </div>
+                                <div class="grid grid-cols-12 gap-4">
+                                    <div class="col-span-12">
+                                        <div class="grid grid-cols-12">
+                                            <div class="col-span-12 sm:col-span-7">
+                                                <div class="mt-4">
+                                                    <p class="mb-2 text-muted">This month</p>
+                                                    <h4 class="mb-3 text-xl">15,547
+                                                        <span class="p-1 px-2 text-xs leading-none text-green-500 rounded-md bg-success/20">0.2 <i class="ri-arrow-up-fill"></i></span>
+                                                    </h4>
+                                                    <p class="mb-4 text-muted">Duis arcu tortor, suscipit eget, imperdiet nec, imperdiet ultrices mauris</p>
+                                                    <div>
+                                                        <a href="#" class="text-white btn bg-purple border-purple">View more</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-span-12 sm:col-span-5">
+                                                <div style="height: 280px;">
+                                                    <div class="h-full" id="pie"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end col -->
+                    </div>
+                </div>
+                <!-- End grid -->
+                {{> partials/footer }}
+            </div>
+        </div>
+    </div>
+</div>
+
+{{> partials/vendor-scripts }}
+
+<script src="assets/libs/apexcharts/apexcharts.min.js"></script>
+
+<script src="assets/libs/jquery/jquery.js"></script>
+
+<script src="assets/libs/highcharts/highcharts.js"></script>
+
+<script src="assets/libs/highcharts/modules/accessibility.js"></script>
+
+<script src="assets/js/pages/blog.js"></script>
+
+<script type="module" src="assets/js/main.js"></script>
+
+</body>
+
+</html>
