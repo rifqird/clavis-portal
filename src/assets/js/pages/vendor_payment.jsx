@@ -129,51 +129,47 @@ function VendorPaymentCard(){
                 </div>
             </div>
     
-            <div class="card mt-3">
-                <div class="flex flex-col gap-4 min-h-[calc(100vh-212px)]">
-                    <div class="grid grid-cols-12 gap-4">
-                        <div class="col-span-12 2xl:col-span-12 order-[17] card">
-                            <div class="flex items-center gap-3 mb-4">
-                                <h2 class="text-base font-semibold capitalize text-slate-800 dark:text-slate-100 grow">Vendor Payments</h2>
-                                <a href="#" class="px-3 py-1.5 rounded-md text-xs border border-black/20 dark:border-darkborder text-muted"><i class="align-bottom ltr:mr-1 rtl:ml-1 ri-filter-line"></i> Filters</a>
-                            </div>
-                            <div className="overflow-x-auto w-full">
-                                <table className="border min-w-max">
-                                    <thead>
-                                        <tr>
-                                            <th>Date</th>
-                                            <th>Number</th>
-                                            <th>Journal</th>
-                                            <th>Payment Method</th>
-                                            <th>Vendor</th>
-                                            <th>Amount in Currency</th>
-                                            <th>Amount</th>
-                                            <th>State</th>
+            <div class="flex flex-col gap-4 min-h-[calc(100vh-212px)] pt-3">
+                <div class="grid grid-cols-12 gap-4">
+                    <div class="col-span-12 2xl:col-span-12 order-[17] card">
+                        <div class="flex items-center gap-3 mb-4">
+                            <h2 class="text-base font-semibold capitalize text-slate-800 dark:text-slate-100 grow">Vendor Payments</h2>
+                            <a href="#" class="px-3 py-1.5 rounded-md text-xs border border-black/20 dark:border-darkborder text-muted"><i class="align-bottom ltr:mr-1 rtl:ml-1 ri-filter-line"></i> Filters</a>
+                        </div>
+                        <div className="overflow-x-auto w-full">
+                            <table className="border min-w-max">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Number</th>
+                                        <th>Journal</th>
+                                        <th>Payment Method</th>
+                                        <th>Vendor</th>
+                                        <th>Amount in Currency</th>
+                                        <th>Amount</th>
+                                        <th>State</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {vendorPayment.map((p, i) => (
+                                        <tr key={i}>
+                                            <td>{formatDate(p.date)}</td>
+                                            <td>{p.name}</td>
+                                            <td>{p.journal_id[1]?p.journal_id[1]:'-'}</td>
+                                            <td>{p.payment_method_line_id[1]?p.payment_method_line_id[1]:'-'}</td>
+                                            <td>{p.partner_id[1]?p.partner_id[1]:'-'}</td>
+                                            <td>{p.currency_id[1]?p.currency_id[1]:'-'}&nbsp;{formatCurrency(p.amount)}</td>
+                                            <td>{p.amount}</td>
+                                            <td className="text-center align-middle">
+                                                <StatusBadge status={p.state} />
+                                            </td>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        {vendorPayment.map((p, i) => (
-                                            <tr key={i}>
-                                                <td>{formatDate(p.date)}</td>
-                                                <td>{p.name}</td>
-                                                <td>{p.journal_id[1]?p.journal_id[1]:'-'}</td>
-                                                <td>{p.payment_method_line_id[1]?p.payment_method_line_id[1]:'-'}</td>
-                                                <td>{p.partner_id[1]?p.partner_id[1]:'-'}</td>
-                                                <td>{p.currency_id[1]?p.currency_id[1]:'-'}&nbsp;{formatCurrency(p.amount)}</td>
-                                                <td>{p.amount}</td>
-                                                <td className="text-center align-middle">
-                                                    <StatusBadge status={p.state} />
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
+                                    ))}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
-                
-                
             </div>
         </div>
     )
