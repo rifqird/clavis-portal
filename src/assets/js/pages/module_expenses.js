@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     loadProducts();
 });
+
 const fileInput = document.getElementById('file');
 const preview = document.getElementById('preview');
 const scanBtn = document.getElementById('scanBtn');
@@ -35,7 +36,6 @@ fileInput.addEventListener('change', function () {
         preview.classList.add('hidden');
         return;
     }
-
     // (opsional) validasi ekstensi
     const allowedExt = ['jpg', 'jpeg', 'png', 'webp'];
     const ext = file.name.split('.').pop().toLowerCase();
@@ -340,7 +340,6 @@ function validateField(id) {
         return true;
     }
 }
-
 submitButton.addEventListener('click', async function () {
     // ambil nilai input
     const file = fileInput.files[0];
@@ -378,17 +377,9 @@ submitButton.addEventListener('click', async function () {
             throw new Error('Gagal mengirim data');
         }
 
-        const result = await response.json();
-        console.log('Success:', result);
-
         successModal.classList.remove('hidden');
         document.getElementById('textSuccess').textContent = 'Data berhasil disimpan';
-        
-        document.getElementById('Toko').value='';
-        document.getElementById('Date').value='';
-        document.getElementById('Note').value='';
-        document.getElementById('Total').value='';
-        document.getElementById('submitButton').classList.add('hidden');
+        clearForm();
         loadProducts();
 
     } catch (error) {
@@ -396,6 +387,7 @@ submitButton.addEventListener('click', async function () {
         alert('Terjadi kesalahan saat mengirim data');
     }
 });
+
 function setScanLoading(isLoading) {
     const btn = document.getElementById('scanBtn');
     const spinner = document.getElementById('scanSpinner');
@@ -436,65 +428,63 @@ function closeSuccessModal(){
 function closeErrorModal(){
     document.getElementById("errorModal").classList.add("hidden");
 }
+let rawData = [];
 function loadProducts() {
     fetch(`${__API_URL__}/module/expense`)
-        .then(res => res.json())
-        .then(data => {
-            if ($.fn.DataTable.isDataTable('#productTable')) {
-                $('#productTable').DataTable().clear().destroy();
-            }
-            const tableData = data.map(product => {
-                return [
-                    `<a href="#!" class="capitalize">${product.id}</a>`,
-                    renderReceiptImage(product.receipt_attachment),
-                    product.name,
-                    product.date,
-                    product.note,
-                    product.amount,
-                    product.sender
-                ];
-            });
+    .then(res => res.json())
+    .then(data => {
+        if ($.fn.DataTable.isDataTable('#productTable')) {
+            $('#productTable').DataTable().clear().destroy();
+        }
+        // siapkan array untuk DataTables
+        const tableData = data.map(product => {
+            return [
+                product.id,
+                renderReceiptImage(product.receipt_attachment),
+                product.name,
+                product.date,
+                product.note,
+                product.amount,
+                product.sender
+            ];
+        });
 
-            // Inisialisasi DataTable
-            $("#productTable").DataTable({
-                data: tableData,
-                scrollX: true,              // 🔥 PENTING
-                autoWidth: false,
-                columns: [
-                    { title: "ID" },
-                    { title: "Image" },
-                    { title: "Name" },
-                    { title: "Date" },
-                    { title: "Note" },
-                    { title: "Amount" },
-                    { title: "Sender" }
-                ]
-            });
-            $('#productTable').DataTable();
+        // Inisialisasi DataTable
+        const table = $("#productTable").DataTable({
+            data: tableData,
+            scrollX: true,              // 🔥 PENTING
+            autoWidth: false,
+            columns: [
+                { title: "ID" },
+                { title: "Image" },
+                { title: "Name" },
+                { title: "Date" },
+                { title: "Note" },
+                { title: "Amount" },
+                { title: "Sender" }
+            ]
+        });
+        $('#productTable').DataTable();
+        $('#productTable tbody').on('click', 'tr', function () {
+            const rowData = table.row(this).data();
+            if (!rowData) return;
 
-            $('#productTable tbody').on('click', 'tr', function () {
-                const rowData = table.row(this).data();
-                if (!rowData) return;
+            // ambil ID
+            const productId = rowData[0];
 
-                // ambil ID
-                const productId = rowData[0];
+            // cari data asli
+            const product = data.find(p => p.id == productId);
+            if (!product) return;
 
-                // cari data asli
-                const product = rawData.find(p => p.id == productId);
-                if (!product) return;
-
-                fillFormFromTable(product);
-            });
-            $('#productTable tbody').on('click', 'tr', function () {
-                $('#productTable tbody tr').removeClass('selected');
-                $(this).addClass('selected');
-                scanBtn.classList.add('hidden')
-            });
-
-            $('#productTable').DataTable();
-
-        })
-        .catch(err => console.error("API Error:", err));
+            fillFormFromTable(product);
+        });
+        $('#productTable tbody').on('click', 'tr', function () {
+            $('#productTable tbody tr').removeClass('selected');
+            $(this).addClass('selected');
+            scanBtn.classList.add('hidden')
+        });
+    })
+    .catch(err => console.error("API Error:", err));
         
 }
 function openImageModal(src) {
@@ -509,7 +499,6 @@ document.getElementById('imageModal').addEventListener('click', function () {
     this.classList.add('hidden');
     this.classList.remove('flex');
 });
-
 function renderReceiptImage(filename) {
     if (!filename) {
         return '-';
@@ -527,6 +516,7 @@ function renderReceiptImage(filename) {
     `;
 }
 function fillFormFromTable(product) {
+    console.log(product);
     // Isi form
     document.getElementById('Toko').value = product.name;
     document.getElementById('Date').value = product.date;
@@ -581,121 +571,3 @@ function clearForm() {
         .querySelectorAll('#productTable tbody tr.selected')
         .forEach(tr => tr.classList.remove('selected'));
 }
-// function showAddModal() {
-//     document.getElementById("addProductModal").classList.remove("hidden");
-// }
-
-// function closeAddModal() {
-//     document.getElementById("addProductModal").classList.add("hidden");
-// }
-// function showDetail(id) {
-//     console.log("Show detail for ID:", id);
-//     fetch(`${__API_URL__}/product/master/${id}`)
-//         .then(res => res.json())
-//         .then(product => {
-//             console.log(product);
-//             document.getElementById("modalContent").innerHTML = `
-//                 <p><strong>Name:</strong> ${product.name}</p>
-//                 <p><strong>Cost:</strong> ${product.cost}</p>
-//                 <p><strong>Sales Price:</strong> ${product.sales_price}</p>
-//                 <p><strong>Product Category:</strong> ${product.product_category}</p>
-//                 <p><strong>UOM:</strong> $${product.unit_of_measure}</p>
-//                 <p><strong>Costing Method:</strong> ${product.costing_method} </p>
-//                 <p><strong>Product Type:</strong> ${product.product_type} </p>
-//             `;
-
-//             document.getElementById("detailModal").classList.remove("hidden");
-//             document.getElementById("detailModal").classList.add("flex");
-//         }).catch(err => console.error("Detail Error:", err));
-// }
-// function closeDetail() {
-//     document.getElementById("detailModal").classList.add("hidden");
-// }
-// function editProduct(id) {
-//     fetch(`${__API_URL__}/product/master/${id}`)
-//     .then(res => res.json())
-//     .then(item => {
-//         document.getElementById("edit_id").value = item.id;
-//         document.getElementById("edit_name").value = item.name;
-//         document.getElementById("edit_cost").value = item.cost;
-//         document.getElementById("edit_sales_price").value = item.sales_price;
-//         document.getElementById("edit_product_category").value = item.product_category;
-//         document.getElementById("edit_uom").value = item.unit_of_measure;
-//         document.getElementById("edit_costing_method").value = item.costing_method;
-//         document.getElementById("edit_product_type").value = item.product_type;
-
-//         document.getElementById("editModal").classList.remove("hidden");
-//     });
-// }
-// function saveEdit() {
-//     const id = document.getElementById("edit_id").value;
-
-//     const data = {
-//         name: document.getElementById("edit_name").value,
-//         cost: document.getElementById("edit_cost").value,
-//         sales_price: document.getElementById("edit_sales_price").value,
-//         product_category: document.getElementById("edit_product_category").value,
-//         unit_of_measure: document.getElementById("edit_uom").value,
-//         costing_method: document.getElementById("edit_costing_method").value,
-//         product_type: document.getElementById("edit_product_type").value
-//     };
-
-//     fetch(`${__API_URL__}/product/master/${id}`, {
-//         method: "PUT",
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify(data)
-//     })
-//     .then(res => res.json())
-//     .then(() => {
-//         closeEditModal();
-//         $('#textSuccess').text('Product updated successfully!');
-//         $("#successModal").removeClass("hidden");
-//         loadProducts();
-//     })
-//     .catch(err => {
-//         console.error("Update Error:", err);
-//         alert("Failed to update data");
-//     });
-    
-// }
-// function closeEditModal() {
-//     document.getElementById("editModal").classList.add("hidden");
-// }
-
-// function showDeleteModal(id) {
-//     fetch(`${__API_URL__}/product/master/${id}`)
-//     .then(res => res.json())
-//     .then(item => {
-//         document.getElementById("deleted_id").value = item.id;
-
-//         document.getElementById("deleteModal").classList.remove("hidden");
-//     });
-// }
-// function deleteProduct() {
-//     const id=document.getElementById('deleted_id').value;
-//     fetch(`${__API_URL__}/product/master/${id}`, {
-//         method: "DELETE"
-//     })
-//     .then(res => {
-//         if (!res.ok) {
-//             throw new Error("Failed to delete product");
-//         }
-//         return res.json();
-//     })
-//     .then(result => {
-//         $("#successModal").removeClass("hidden");
-//         $('#textSuccess').text('Product deleted successfully!');
-//         closeDeleteModal();
-//         loadProducts();
-//     })
-//     .catch(err => {
-//         console.error("Delete Error:", err);
-//         alert("Failed to delete product");
-//     });
-// }
-// function closeDeleteModal(){
-//     document.getElementById("deleteModal").classList.add("hidden");
-// }
-// function closeSuccessModal(){
-//     document.getElementById("successModal").classList.add("hidden");
-// }

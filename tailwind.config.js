@@ -5,6 +5,19 @@ module.exports = {
         "./src/**/*.{html,js}",
         "./src/assets/libs/*"
     ],
+    safelist: [
+        'bg-emerald-100',
+        'text-emerald-700',
+        'bg-amber-100',
+        'text-amber-700',
+        'inline-flex',
+        'items-center',
+        'px-3',
+        'py-1',
+        'text-xs',
+        'font-semibold',
+        'rounded-full',
+    ],
     darkMode: ['class', '[data-mode="dark"]'],
     theme: {
         container: {
