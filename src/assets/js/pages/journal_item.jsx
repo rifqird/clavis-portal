@@ -16,6 +16,20 @@ function JournalItemCard(){
     const [journalDistribution, setJournalDistribution] = useState([]);
     const chartRef3 = useRef(null);
     const chartInstance3 = useRef(null);
+    const [showFilter, setShowFilter] = useState(false);
+    const [startDate, setStartDate] = useState("");
+    const [endDate, setEndDate] = useState("");
+    const filterRef = useRef(null);
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (filterRef.current && !filterRef.current.contains(e.target)) {
+            setShowFilter(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
     useEffect(()=>{
         axios.get(`${__API_URL__}/journal_item/master`)
         .then(res=>setJournalItem(res.data))
@@ -48,6 +62,21 @@ function JournalItemCard(){
         .then(res=>setJournalDistribution(res.data))
         .catch(err=>console.error(err));
     }, []);
+    const filteredJournal = journalItem.filter((item) => {
+        if (!startDate && !endDate) return true;
+
+        const d = new Date(item.date);
+        const start = new Date(startDate);
+        start.setHours(0,0,0,0);
+
+        const end = new Date(endDate);
+        end.setHours(23,59,59,999);
+
+        if (start && d < new Date(start)) return false;
+        if (end && d > new Date(end)) return false;
+
+        return true;
+    });
     useEffect(() => {
         if (!residualAging.length) return;
 
@@ -330,12 +359,45 @@ function JournalItemCard(){
                 </div>
 
             </div>
-            <div class="flex flex-col gap-4 min-h-[calc(100vh-212px)]">
+            <div class="flex flex-col gap-4 min-h-[calc(100vh-212px)] mt-4">
                 <div class="grid grid-cols-12 gap-4">
                     <div class="col-span-12 2xl:col-span-12 order-[17] card">
-                        <div class="flex items-center gap-3 mb-4">
-                            <h2 class="text-base font-semibold capitalize text-slate-800 dark:text-slate-100 grow">Journal Items</h2>
-                            <a href="#" class="px-3 py-1.5 rounded-md text-xs border border-black/20 dark:border-darkborder text-muted"><i class="align-bottom ltr:mr-1 rtl:ml-1 ri-filter-line"></i> Filters</a>
+                        <div className="flex items-center gap-3 mb-4 relative" ref={filterRef}>
+                            <h2 className="text-base font-semibold capitalize text-slate-800 dark:text-slate-100 grow">
+                                Journal Items
+                            </h2>
+                            <div className="relative">
+                                <button onClick={() => setShowFilter(!showFilter)} className="px-3 py-1.5 rounded-md text-xs border border-black/20 dark:border-darkborder text-muted">
+                                    <i className="align-bottom ltr:mr-1 rtl:ml-1 ri-filter-line"></i>
+                                    Filters
+                                </button>
+
+                                {showFilter && (
+                                    <div className="absolute top-full mt-2 right-0 w-96 bg-white dark:bg-slate-800 border border-gray-200 dark:border-darkborder rounded-lg shadow-xl p-4 z-50">
+                                        <h4 className="text-sm font-semibold mb-3">Date Range</h4>
+                                        <div className="flex gap-3">
+                                            <div className="flex-1 flex flex-col">
+                                                <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className="w-full border rounded p-2 text-sm"/>
+                                            </div>
+                                            <div className="flex-1 flex flex-col">
+                                                <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className="w-full border rounded p-2 text-sm"/>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex justify-between mt-4">
+                                            <button onClick={() => {
+                                                setStartDate("");
+                                                setEndDate("");
+                                            }} className="text-xs text-red-500">
+                                                Reset
+                                            </button>
+                                            <button onClick={() => setShowFilter(false)} className="px-3 py-1 text-xs bg-blue-600 text-white rounded">
+                                                Apply
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                         
                         <div className="overflow-x-auto w-full">
@@ -352,7 +414,7 @@ function JournalItemCard(){
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {journalItem.map((p, i) => (
+                                    {filteredJournal.map((p, i) => (
                                         <tr key={i}>
                                             <td>{formatDate(p.date)}</td>
                                             <td>{p.number}</td>
