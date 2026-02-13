@@ -17,45 +17,48 @@ document.getElementById("filterDate").addEventListener("change", () => {
 async function loadMarkers() {
     const sales_name=document.getElementById("searchSales").value.toLowerCase();
     const filter_date=document.getElementById("filterDate").value;
-    try {
-        const res = await fetch(`${__API_URL__}/maps?sales_name=`+sales_name+`&date=` + filter_date);
-        const data = await res.json();
-        console.log(data);
-
+    
+    let bounds = [];
+    try{
+        const response = await axios.get(`${__API_URL__}/maps/get_sales_area`);
+        const data=response.data.data;
         markerLayer.clearLayers();
-
-        let bounds = [];
-
         data.forEach(p => {
-            const photoIcon = L.icon({
-                iconUrl: p.photo,
-                iconSize: [40, 40],
-                iconAnchor: [20, 40],
-                popupAnchor: [0, -40],
-                className: 'rounded-icon'
+            const wrapperClass =
+                p.visit_status_label === 'SELESAI'
+                    ? 'pin-wrapper-close'
+                    : 'pin-wrapper';
+
+            const photoIcon = L.divIcon({
+                className: 'custom-marker',
+                html: `
+                    <div class="${wrapperClass}">
+                        <img src="${p.sales_photo_url}" />
+                    </div>
+                `,
+                iconSize: [60, 70],
+                iconAnchor: [30, 60],
+                popupAnchor: [0, -60]
             });
 
-            const marker = L.marker([p.lat, p.lng], { icon: photoIcon })
-                .bindPopup(`
-                    <b>${p.name}</b><br>
-                    <img src="${p.photo}" width="100" style="border-radius:6px;margin-top:6px;" />
-                `);
+
+            const marker = L.marker([p.latitude, p.longitude], { icon: photoIcon })
+            .bindPopup(`
+                <b>${p.sales_name}</b><br>
+                <img src="${p.sales_photo_url}" width="100" style="border-radius:6px;margin-top:6px;" />
+            `);
 
             markerLayer.addLayer(marker);
 
-            bounds.push([p.lat, p.lng]);
+            bounds.push([p.latitude, p.longitude]);
         });
-
-        // 👇 Zoom only the first time
         if (bounds.length > 0) {
             map.flyToBounds(bounds, {
                 padding: [50, 50],
                 animate: true,
-                duration: 1.5   // durasi animasi
+                duration: 1.5
             });
-
         }
-
     } catch (err) {
         console.error("Gagal fetch:", err);
     }

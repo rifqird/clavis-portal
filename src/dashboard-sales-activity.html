@@ -16,6 +16,45 @@
         .leaflet-container {
             z-index: 0 !important;
         }
+        .custom-marker {
+            background: none;
+            border: none;
+        }
+
+        .pin-wrapper {
+            width: 50px;
+            height: 60px;
+            background: url('/assets/images/location_2.png') no-repeat center;
+            background-size: contain;
+            position: relative;
+        }
+
+        .pin-wrapper img {
+            position: absolute;
+            top: 6px;
+            left: 7px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .pin-wrapper-close {
+            width: 50px;
+            height: 60px;
+            background: url('/assets/images/location.png') no-repeat center;
+            background-size: contain;
+            position: relative;
+        }
+
+        .pin-wrapper-close img {
+            position: absolute;
+            top: 6px;
+            left: 7px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
     </style>
 </head>
 
@@ -43,7 +82,7 @@
             <!-- Start Content -->
             <div class="h-[calc(100vh-60px)] relative overflow-y-auto overflow-x-hidden p-4 space-y-4 detached-content">
 
-                {{> partials/page-heading title="" sub-title="Real Estate" }}
+                {{> partials/page-heading title="" sub-title="Sales Activity" }}
 
                 <!-- Start All Card -->
                 <div class="flex flex-col gap-4 min-h-[calc(100vh-212px)]">
@@ -53,7 +92,6 @@
                                 <div class="col-span-12 xl:col-span-12">
                                     <div class="card">
                                         <div class="flex justify-between items-center mb-[5px]">
-                                            <h5 class="text-base font-semibold capitalize text-slate-800 dark:text-slate-100">Reservations Per Day</h5>
                                             <a href="#" class="px-3 py-1.5 rounded-md text-xs border border-black/20 dark:border-darkborder text-muted"><i class="align-bottom ltr:mr-1 rtl:ml-1 ri-filter-line"></i> Aug 2024</a>
                                         </div>
                                         <div id="map" class="relative z-0 w-full h-[400px]"></div>
